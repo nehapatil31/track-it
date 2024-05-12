@@ -26,6 +26,7 @@ const NewIssuePage = () => {
   });
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   return (
     <div className="max-w-xl">
       {error && (
