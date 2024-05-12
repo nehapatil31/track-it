@@ -6,11 +6,13 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import IssueDetail from "./IssueDetail";
+import EditIssueButton from "./EditIssueButton";
 
 interface Props {
   params: { id: string };
 }
-const IssueDetail = async ({ params }: Props) => {
+const IssueDetailPage = async ({ params }: Props) => {
   const issueDetail = await prisma.issue.findUnique({
     where: { id: parseInt(params.id) },
   });
@@ -18,23 +20,13 @@ const IssueDetail = async ({ params }: Props) => {
   return (
     <Grid columns={{ initial: "1", md: "2" }} gap="5">
       <Box>
-        <Heading>Title: {issueDetail.title}</Heading>
-        <Flex className="space-x-3" my="2">
-          <IssueStatusBadge status={issueDetail.status}></IssueStatusBadge>
-          <Text> {issueDetail.createdAt.toDateString()}</Text>
-        </Flex>
-        <Card className="prose" mt="4">
-          <ReactMarkdown>{issueDetail.description}</ReactMarkdown>
-        </Card>
+        <IssueDetail issue={issueDetail} />
       </Box>
       <Box>
-        <Button>
-          <Pencil2Icon />
-          <Link href={`/issues/${issueDetail.id}/edit`}>Edit Issue</Link>
-        </Button>
+        <EditIssueButton issueId={issueDetail.id} />
       </Box>
     </Grid>
   );
 };
 
-export default IssueDetail;
+export default IssueDetailPage;
