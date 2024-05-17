@@ -2,7 +2,7 @@
 import { Button, Callout, TextField, Text } from "@radix-ui/themes";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
-import SimpleMDE from "react-simplemde-editor";
+import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -12,6 +12,10 @@ import { z } from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
 import { Issue } from "@prisma/client";
+
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+});
 
 type IssueFormInfer = z.infer<typeof issueSchema>;
 
@@ -46,6 +50,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
               await axios.post("/api/issues", data);
             }
             router.push("/issues");
+            router.refresh();
           } catch (error) {
             setIsSubmitting(false);
             setError("An unexpected error occurred.");
