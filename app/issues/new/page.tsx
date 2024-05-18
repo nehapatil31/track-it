@@ -1,28 +1,14 @@
 "use client";
-import { issueSchema } from "@/app/validationSchemas";
-import { zodResolver } from "@hookform/resolvers/zod";
 import "easymde/dist/easymde.min.css";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import IssueForm from "../_components/IssueForm";
+import dynamic from "next/dynamic";
+import IssueFormSkeleton from "./loading";
 
-type IssueFormInfer = z.infer<typeof issueSchema>;
+export const IssueForm = dynamic(
+  () => import("@/app/issues/_components/IssueForm"),
+  { ssr: false, loading: () => <IssueFormSkeleton /> }
+);
 
 const NewIssuePage = () => {
-  const router = useRouter();
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IssueFormInfer>({
-    resolver: zodResolver(issueSchema),
-  });
-  const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   return (
     <>
       <IssueForm />
