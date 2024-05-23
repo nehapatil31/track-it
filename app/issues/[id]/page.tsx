@@ -1,10 +1,11 @@
 import authoptions from "@/app/api/auth/authOptions";
 import prisma from "@/prisma/client";
-import { Box, Grid } from "@radix-ui/themes";
+import { Box, Flex, Grid } from "@radix-ui/themes";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import EditIssueButton from "./EditIssueButton";
 import IssueDetail from "./IssueDetail";
+import AssineeSelect from "./AssineeSelect";
 
 interface Props {
   params: { id: string };
@@ -23,7 +24,10 @@ const IssueDetailPage = async ({ params }: Props) => {
       </Box>
       {session && (
         <Box>
-          <EditIssueButton issueId={issueDetail.id} />
+          <Flex direction="column" gap="4">
+            <AssineeSelect />
+            <EditIssueButton issueId={issueDetail.id} />
+          </Flex>
         </Box>
       )}
     </Grid>
