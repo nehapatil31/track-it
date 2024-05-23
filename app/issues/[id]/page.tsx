@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import EditIssueButton from "./EditIssueButton";
 import IssueDetail from "./IssueDetail";
-import AssineeSelect from "./AssineeSelect";
+import AssineeSelect from "./AssigneeSelect";
 
 interface Props {
   params: { id: string };
