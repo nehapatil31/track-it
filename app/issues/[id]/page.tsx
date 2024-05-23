@@ -1,18 +1,17 @@
-import IssueStatusBadge from "@/app/components/IssueStatusBadge";
+import authoptions from "@/app/api/auth/authOptions";
 import prisma from "@/prisma/client";
-import { Box, Button, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
+import { Box, Grid } from "@radix-ui/themes";
+import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
-import React from "react";
-import ReactMarkdown from "react-markdown";
-import { Pencil2Icon } from "@radix-ui/react-icons";
-import Link from "next/link";
-import IssueDetail from "./IssueDetail";
 import EditIssueButton from "./EditIssueButton";
+import IssueDetail from "./IssueDetail";
 
 interface Props {
   params: { id: string };
 }
 const IssueDetailPage = async ({ params }: Props) => {
+  const session = await getServerSession(authoptions);
+
   const issueDetail = await prisma.issue.findUnique({
     where: { id: parseInt(params.id) },
   });
@@ -22,9 +21,11 @@ const IssueDetailPage = async ({ params }: Props) => {
       <Box>
         <IssueDetail issue={issueDetail} />
       </Box>
-      <Box>
-        <EditIssueButton issueId={issueDetail.id} />
-      </Box>
+      {session && (
+        <Box>
+          <EditIssueButton issueId={issueDetail.id} />
+        </Box>
+      )}
     </Grid>
   );
 };
