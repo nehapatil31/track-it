@@ -55,6 +55,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
       >
         <TextField.Root
           placeholder="Title"
+          data-testid="title-input"
           defaultValue={issue?.title}
           {...register("title")}
         ></TextField.Root>
@@ -63,6 +64,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
 
         <Controller
           name="description"
+          data-testid="description-input"
           control={control}
           defaultValue={issue?.description}
           render={({ field }) => (
