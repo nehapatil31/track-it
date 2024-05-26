@@ -6,16 +6,18 @@ import { notFound } from "next/navigation";
 import EditIssueButton from "./EditIssueButton";
 import IssueDetail from "./IssueDetail";
 import AssineeSelect from "./AssigneeSelect";
+import { cache } from "react";
 
 interface Props {
   params: { id: string };
 }
+const fetchUser = cache((issueId: number) =>
+  prisma.issue.findUnique({ where: { id: issueId } })
+);
 const IssueDetailPage = async ({ params }: Props) => {
   const session = await getServerSession(authoptions);
 
-  const issueDetail = await prisma.issue.findUnique({
-    where: { id: parseInt(params.id) },
-  });
+  const issueDetail = await fetchUser(parseInt(params.id));
   if (!issueDetail) notFound();
   return (
     <Grid columns={{ initial: "1", md: "2" }} gap="5">
@@ -35,9 +37,7 @@ const IssueDetailPage = async ({ params }: Props) => {
 };
 
 export async function generateMetadata({ params }: Props) {
-  const issue = await prisma.issue.findUnique({
-    where: { id: parseInt(params.id) },
-  });
+  const issue = await fetchUser(parseInt(params.id));
   return {
     title: `Issue Tracker - ${issue?.title}`,
     description: issue?.description,
