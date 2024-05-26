@@ -29,7 +29,7 @@ const IssueStatusFilter = () => {
           query.set("status", value);
         }
         const queryStr = query.size ? "?" + query.toString() : "";
-        router.push("/issues" + queryStr);
+        router.push("/issues/list" + queryStr);
       }}
     >
       <Select.Trigger placeholder="Filter by status..."></Select.Trigger>
