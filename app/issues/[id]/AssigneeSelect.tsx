@@ -52,7 +52,7 @@ const useUsers = () =>
     queryKey: ["users"],
     queryFn: () => axios.get<User[]>("/api/users").then((res) => res.data),
     retry: 3,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 1, // 1 minutes
   });
 
 export default AssineeSelect;
