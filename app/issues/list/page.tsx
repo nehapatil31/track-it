@@ -7,7 +7,7 @@ import { Issue, Status } from "@prisma/client";
 import NextLink from "next/link";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import Pagination from "../../components/Pagination";
-import IssueTable, { columnNames, IssueQuery } from "./IssueTable";
+import IssueTable, { columnNames, IssueQuery, IssueType } from "./IssueTable";
 import { Metadata } from "next";
 
 interface Props {
@@ -27,11 +27,23 @@ const IssuesPage = async ({ searchParams }: Props) => {
   const where = {
     status,
   };
-  const issues = await prisma.issue.findMany({
+  const issues: IssueType[] = await prisma.issue.findMany({
     where,
     orderBy,
     skip: (page - 1) * pageSize,
     take: pageSize,
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      status: true,
+      createdAt: true,
+      updatedAt: true,
+      assignedToUserId: true,
+      assignedToUser: {
+        select: { image: true, name: true },
+      },
+    },
   });
   const itemCount = await prisma.issue.count({
     where,
