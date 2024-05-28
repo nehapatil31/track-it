@@ -1,12 +1,12 @@
 import authoptions from "@/app/api/auth/authOptions";
 import prisma from "@/prisma/client";
-import { Box, Flex, Grid } from "@radix-ui/themes";
+import { Box, Flex, Grid, Text } from "@radix-ui/themes";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
+import { cache } from "react";
+import AssineeSelect from "./AssigneeSelect";
 import EditIssueButton from "./EditIssueButton";
 import IssueDetail from "./IssueDetail";
-import AssineeSelect from "./AssigneeSelect";
-import { cache } from "react";
 import StatusSelect from "./StatusSelect";
 
 interface Props {
@@ -34,6 +34,7 @@ const IssueDetailPage = async ({ params }: Props) => {
           </Flex>
         </Box>
       )}
+      {!session && <Text size={"2"}>Log in to update this issue</Text>}
     </Grid>
   );
 };

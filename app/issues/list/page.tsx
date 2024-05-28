@@ -1,14 +1,10 @@
 import prisma from "@/prisma/client";
-import { Flex, Table } from "@radix-ui/themes";
-import IssueStatusBadge from "../../components/IssueStatusBadge";
-import Link from "../../components/Link";
-import IssueActions from "./IssueActions";
-import { Issue, Status } from "@prisma/client";
-import NextLink from "next/link";
-import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
-import Pagination from "../../components/Pagination";
-import IssueTable, { columnNames, IssueQuery, IssueType } from "./IssueTable";
+import { Status } from "@prisma/client";
+import { Flex } from "@radix-ui/themes";
 import { Metadata } from "next";
+import Pagination from "../../components/Pagination";
+import IssueActions from "./IssueActions";
+import IssueTable, { columnNames, IssueQuery, IssueType } from "./IssueTable";
 
 interface Props {
   searchParams: IssueQuery;
