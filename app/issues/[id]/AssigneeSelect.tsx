@@ -18,6 +18,9 @@ const AssineeSelect = ({ issue }: { issue: Issue }) => {
       .patch(`/api/issues/${issue.id}`, {
         assignedToUserId: userId == "nouser" ? null : userId,
       })
+      .then(() => {
+        toast.success("User assigned successfully");
+      })
       .catch(() => {
         toast.error("Failed to assign user");
       });

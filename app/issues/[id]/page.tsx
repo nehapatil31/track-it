@@ -7,6 +7,7 @@ import EditIssueButton from "./EditIssueButton";
 import IssueDetail from "./IssueDetail";
 import AssineeSelect from "./AssigneeSelect";
 import { cache } from "react";
+import StatusSelect from "./StatusSelect";
 
 interface Props {
   params: { id: string };
@@ -27,6 +28,7 @@ const IssueDetailPage = async ({ params }: Props) => {
       {session && (
         <Box>
           <Flex direction="column" gap="4">
+            <StatusSelect issue={issueDetail} />
             <AssineeSelect issue={issueDetail} />
             <EditIssueButton issueId={issueDetail.id} />
           </Flex>
