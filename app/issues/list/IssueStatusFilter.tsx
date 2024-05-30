@@ -25,6 +25,9 @@ const IssueStatusFilter = () => {
         if (searchParams.get("order")) {
           query.set("order", searchParams.get("order") as string);
         }
+        if (searchParams.get("assignee")) {
+          query.set("assignee", searchParams.get("assignee") as string);
+        }
         if (value !== "ALL") {
           query.set("status", value);
         }

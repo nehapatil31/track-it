@@ -5,13 +5,17 @@ import IssueStatusFilter from "./IssueStatusFilter";
 import authoptions from "@/app/api/auth/authOptions";
 import { getServerSession } from "next-auth";
 import { Text } from "@radix-ui/themes";
+import AssigneeFilter from "./AssigneeFilter";
 
 const IssueActions = async () => {
   const session = await getServerSession(authoptions);
 
   return (
     <Flex justify={"between"}>
-      <IssueStatusFilter />
+      <Flex gap={"2"}>
+        <IssueStatusFilter />
+        <AssigneeFilter />
+      </Flex>
       {session && (
         <Button>
           <Link href="/issues/new">New Issue</Link>

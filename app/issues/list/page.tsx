@@ -20,9 +20,15 @@ const IssuesPage = async ({ searchParams }: Props) => {
 
   const page = parseInt(searchParams.page) || 1;
   const pageSize = 10;
-  const where = {
+  const where: { status?: Status; assignedToUserId?: string | null } = {
     status,
   };
+  if (searchParams.assignee && searchParams.assignee !== "UNASSIGNED") {
+    where.assignedToUserId = searchParams.assignee;
+  }
+  if (searchParams.assignee && searchParams.assignee === "UNASSIGNED") {
+    where.assignedToUserId = null;
+  }
   const issues: IssueType[] = await prisma.issue.findMany({
     where,
     orderBy,
