@@ -14,10 +14,14 @@ const IssuesPage = async ({ searchParams }: Props) => {
     ? searchParams.status
     : undefined;
 
-  const orderBy = columnNames.includes(searchParams.orderBy)
+  let orderBy = columnNames.includes(searchParams.orderBy)
     ? { [searchParams.orderBy]: searchParams.order }
     : undefined;
 
+  //If no orderby param set then show latest created issue on top
+  if (!searchParams.orderBy) {
+    orderBy = { createdAt: "desc" };
+  }
   const page = parseInt(searchParams.page) || 1;
   const pageSize = 10;
   const where: { status?: Status; assignedToUserId?: string | null } = {

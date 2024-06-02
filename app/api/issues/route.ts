@@ -18,5 +18,8 @@ export async function POST(request: NextRequest) {
   const newIssue = await prisma.issue.create({
     data: { title: body.title, description: body.description },
   });
+  await prisma.history.create({
+    data: { issueId: newIssue.id, userId: session.user!.id, type: "CREATED" },
+  });
   return NextResponse.json(newIssue, { status: 201 });
 }
