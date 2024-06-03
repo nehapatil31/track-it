@@ -1,12 +1,16 @@
 import authoptions from "@/app/api/auth/authOptions";
 import prisma from "@/prisma/client";
-import { Box, Flex, Grid } from "@radix-ui/themes";
+import { Event } from "@prisma/client";
+import { Box, Flex, Grid, Text } from "@radix-ui/themes";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
-import EditIssueButton from "./EditIssueButton";
-import IssueDetail from "./IssueDetail";
-import AssineeSelect from "./AssigneeSelect";
 import { cache } from "react";
+import AssineeSelect from "./AssigneeSelect";
+import EditIssueButton from "./EditIssueButton";
+import History from "./History";
+import Comment from "./Comment";
+import IssueDetail from "./IssueDetail";
+import StatusSelect from "./StatusSelect";
 
 interface Props {
   params: { id: string };
@@ -18,7 +22,9 @@ const IssueDetailPage = async ({ params }: Props) => {
   const session = await getServerSession(authoptions);
 
   const issueDetail = await fetchUser(parseInt(params.id));
+
   if (!issueDetail) notFound();
+
   return (
     <Grid columns={{ initial: "1", md: "2" }} gap="5">
       <Box>
@@ -27,11 +33,15 @@ const IssueDetailPage = async ({ params }: Props) => {
       {session && (
         <Box>
           <Flex direction="column" gap="4">
+            <StatusSelect issue={issueDetail} />
             <AssineeSelect issue={issueDetail} />
             <EditIssueButton issueId={issueDetail.id} />
           </Flex>
         </Box>
       )}
+      {!session && <Text size={"2"}>Log in to update this issue</Text>}
+      {session && <History issueDetail={issueDetail} />}
+      {session && <Comment issueDetail={issueDetail} session={session} />}
     </Grid>
   );
 };

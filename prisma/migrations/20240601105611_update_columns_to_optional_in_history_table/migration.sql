@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "History" ALTER COLUMN "field" DROP NOT NULL,
+ALTER COLUMN "newValue" DROP NOT NULL,
+ALTER COLUMN "oldValue" DROP NOT NULL;

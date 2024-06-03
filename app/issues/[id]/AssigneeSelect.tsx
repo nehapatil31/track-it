@@ -1,6 +1,6 @@
 "use client";
 import { Issue, User } from "@prisma/client";
-import { Select } from "@radix-ui/themes";
+import { Avatar, Flex, Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -17,6 +17,9 @@ const AssineeSelect = ({ issue }: { issue: Issue }) => {
     axios
       .patch(`/api/issues/${issue.id}`, {
         assignedToUserId: userId == "nouser" ? null : userId,
+      })
+      .then(() => {
+        toast.success("User assigned successfully");
       })
       .catch(() => {
         toast.error("Failed to assign user");
@@ -36,7 +39,15 @@ const AssineeSelect = ({ issue }: { issue: Issue }) => {
             <Select.Item value="nouser">Unassigned</Select.Item>
             {users?.map((i) => (
               <Select.Item key={i.id} value={i.id}>
-                {i.name}
+                <Flex align={"center"} gap={"2"}>
+                  <Avatar
+                    src={i.image!}
+                    fallback={i.name![0]}
+                    radius="full"
+                    size={"1"}
+                  />
+                  {i.name}
+                </Flex>
               </Select.Item>
             ))}
           </Select.Group>

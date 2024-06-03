@@ -1,14 +1,10 @@
 import prisma from "@/prisma/client";
-import { Flex, Table } from "@radix-ui/themes";
-import IssueStatusBadge from "../../components/IssueStatusBadge";
-import Link from "../../components/Link";
-import IssueActions from "./IssueActions";
-import { Issue, Status } from "@prisma/client";
-import NextLink from "next/link";
-import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
-import Pagination from "../../components/Pagination";
-import IssueTable, { columnNames, IssueQuery } from "./IssueTable";
+import { Status } from "@prisma/client";
+import { Flex } from "@radix-ui/themes";
 import { Metadata } from "next";
+import Pagination from "../../components/Pagination";
+import IssueActions from "./IssueActions";
+import IssueTable, { columnNames, IssueQuery, IssueType } from "./IssueTable";
 
 interface Props {
   searchParams: IssueQuery;
@@ -18,20 +14,42 @@ const IssuesPage = async ({ searchParams }: Props) => {
     ? searchParams.status
     : undefined;
 
-  const orderBy = columnNames.includes(searchParams.orderBy)
+  let orderBy = columnNames.includes(searchParams.orderBy)
     ? { [searchParams.orderBy]: searchParams.order }
     : undefined;
 
+  //If no orderby param set then show latest created issue on top
+  if (!searchParams.orderBy) {
+    orderBy = { createdAt: "desc" };
+  }
   const page = parseInt(searchParams.page) || 1;
   const pageSize = 10;
-  const where = {
+  const where: { status?: Status; assignedToUserId?: string | null } = {
     status,
   };
-  const issues = await prisma.issue.findMany({
+  if (searchParams.assignee && searchParams.assignee !== "UNASSIGNED") {
+    where.assignedToUserId = searchParams.assignee;
+  }
+  if (searchParams.assignee && searchParams.assignee === "UNASSIGNED") {
+    where.assignedToUserId = null;
+  }
+  const issues: IssueType[] = await prisma.issue.findMany({
     where,
     orderBy,
     skip: (page - 1) * pageSize,
     take: pageSize,
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      status: true,
+      createdAt: true,
+      updatedAt: true,
+      assignedToUserId: true,
+      assignedToUser: {
+        select: { image: true, name: true },
+      },
+    },
   });
   const itemCount = await prisma.issue.count({
     where,
