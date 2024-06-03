@@ -7,6 +7,7 @@ import events from "events";
 import React from "react";
 
 type EventType = {
+  id: number;
   type: Event;
   createdAt: Date;
   field: string | null;
@@ -36,6 +37,7 @@ const History = async ({ issueDetail }: { issueDetail: Issue }) => {
   const events: EventType[] = await prisma.history.findMany({
     where: { issueId: issueDetail.id },
     select: {
+      id: true,
       type: true,
       createdAt: true,
       field: true,
@@ -102,7 +104,7 @@ const History = async ({ issueDetail }: { issueDetail: Issue }) => {
       {events &&
         events.map((event) => {
           return (
-            <div className="my-8">
+            <div className="my-8" key={event.id}>
               <Flex align={"center"} gap={"2"} className="my-2">
                 <Avatar
                   src={event.user.image!}
