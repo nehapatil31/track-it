@@ -16,6 +16,7 @@ model Issue {
   updatedAt        DateTime  @updatedAt
   assignedToUserId String?   @db.VarChar(255)
   history          History[]
+  comment          Comment[]
   assignedToUser   User?     @relation(fields: [assignedToUserId], references: [id])
 }
 
@@ -29,6 +30,7 @@ model User {
   updatedAt      DateTime  @updatedAt
   accounts       Account[]
   history        History[]
+  comment        Comment[]
   assignedIssues Issue[]
   sessions       Session[]
 }
@@ -78,6 +80,16 @@ model History {
   field     String?
   newValue  String?
   oldValue  String?
+  issue     Issue    @relation(fields: [issueId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  issueId   Int
+  userId    String
+  message   String
+  createdAt DateTime @default(now())
   issue     Issue    @relation(fields: [issueId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
 }

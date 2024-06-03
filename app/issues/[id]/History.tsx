@@ -48,6 +48,7 @@ const History = async ({ issueDetail }: { issueDetail: Issue }) => {
         },
       },
     },
+    orderBy: { createdAt: "desc" },
   });
 
   //get user details
@@ -97,7 +98,7 @@ const History = async ({ issueDetail }: { issueDetail: Issue }) => {
   }
   return (
     <Card className="prose" mt="4">
-      <h3>Issue history</h3>
+      <h3>History</h3>
       {events &&
         events.map((event) => {
           return (

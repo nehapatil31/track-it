@@ -8,6 +8,7 @@ import { cache } from "react";
 import AssineeSelect from "./AssigneeSelect";
 import EditIssueButton from "./EditIssueButton";
 import History from "./History";
+import Comment from "./Comment";
 import IssueDetail from "./IssueDetail";
 import StatusSelect from "./StatusSelect";
 
@@ -39,7 +40,8 @@ const IssueDetailPage = async ({ params }: Props) => {
         </Box>
       )}
       {!session && <Text size={"2"}>Log in to update this issue</Text>}
-      <History issueDetail={issueDetail} />
+      {session && <History issueDetail={issueDetail} />}
+      {session && <Comment issueDetail={issueDetail} session={session} />}
     </Grid>
   );
 };
